@@ -1,8 +1,7 @@
 import { createBrowserRouter } from "react-router-dom";
-import Home from "./pages/Home";
 import Auth from "./pages/Auth";
 import { AuthType } from "./components/Hint";
-import Todo from "./components/todo/Todo";
+import Todos from "./components/todo/Todos";
 import PrivateRoute from "./components/PrivateRoute";
 
 const router = createBrowserRouter([
@@ -12,7 +11,7 @@ const router = createBrowserRouter([
     children: [
       {
         path: "/",
-        element: <Todo />,
+        element: <Todos />,
       },
     ],
   },
