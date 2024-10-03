@@ -6,8 +6,6 @@ const API_URL = "/auth";
 // register user API
 const register = async (user: User): Promise<void> => {
   const response = await axiosInstance.post(`${API_URL}/signup`, user);
-  console.log("response: ", response);
-  // wrap the response.data because localStorage can only hold string.
   if (response.data) {
     localStorage.setItem("token", JSON.stringify(response.data));
   }
@@ -16,8 +14,6 @@ const register = async (user: User): Promise<void> => {
 
 const login = async (user: User): Promise<string> => {
   const response = await axiosInstance.post(`${API_URL}/signin`, user);
-  console.log("response: ", response);
-  // wrap the response.data because localStorage can only hold string.
   if (response.data) {
     localStorage.setItem("token", JSON.stringify(response.data));
   }
