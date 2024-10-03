@@ -24,11 +24,7 @@ const getTodos = async (): Promise<Todo[]> => {
     },
   };
 
-  console.log("getTodos() config: ", config);
-
   const response = await axiosInstance.get(API_URL, config);
-
-  console.log("getTodos() response: ", response);
   return response.data;
 };
 
