@@ -17,7 +17,6 @@ import {
   deleteTodo,
   getTodos,
   postTodos,
-  resetAll,
   updateTodo,
 } from "../../reducers/todoSlice";
 import { LoadingButton } from "@mui/lab";
@@ -31,13 +30,15 @@ const Todos = () => {
     undefined
   );
 
-  const { todos, isFetchingData, isCreatingData, isSuccess } = useSelector(
+  const { todos, isFetchingData, isCreatingData } = useSelector(
     (state: RootState) => state.todo
   );
 
+  const { token } = useSelector((state: RootState) => state.auth);
+
   useEffect(() => {
-    dispatch(getTodos());
-  }, [dispatch]);
+    dispatch(getTodos(token));
+  }, [dispatch, token]);
 
   const clearFields = () => {
     setTitle("");

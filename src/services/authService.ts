@@ -15,7 +15,7 @@ const register = async (user: User): Promise<void> => {
 const login = async (user: User): Promise<string> => {
   const response = await axiosInstance.post(`${API_URL}/signin`, user);
   if (response.data) {
-    localStorage.setItem("token", JSON.stringify(response.data));
+    localStorage.setItem("token", response.data);
   }
   return response.data;
 };

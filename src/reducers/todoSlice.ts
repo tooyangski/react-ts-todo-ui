@@ -1,6 +1,7 @@
 import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
 import { Todo } from "../types/Todo";
 import todoService from "../services/todoService";
+import { RootState } from "../store";
 
 type TodoApiState = {
   todos: Todo[];
@@ -25,24 +26,31 @@ const initialState: TodoApiState = {
   message: "",
 };
 
-export const getTodos = createAsyncThunk("get/todos", async (_, thunkAPI) => {
-  try {
-    return await todoService.getTodos();
-  } catch (error: any) {
-    const message =
-      (error.response && error.response.data && error.response.data.message) ||
-      error.message ||
-      error.toString();
+export const getTodos = createAsyncThunk<any, any, { state: RootState }>(
+  "get/todos",
+  async (_, thunkAPI) => {
+    try {
+      const token = thunkAPI.getState().auth.token;
+      return await todoService.getTodos(token);
+    } catch (error: any) {
+      const message =
+        (error.response &&
+          error.response.data &&
+          error.response.data.message) ||
+        error.message ||
+        error.toString();
 
-    return thunkAPI.rejectWithValue(message);
+      return thunkAPI.rejectWithValue(message);
+    }
   }
-});
+);
 
-export const postTodos = createAsyncThunk(
+export const postTodos = createAsyncThunk<any, any, { state: RootState }>(
   "post/todos",
   async (todo: Todo, thunkAPI) => {
     try {
-      return await todoService.createTodo(todo);
+      const token = thunkAPI.getState().auth.token;
+      return await todoService.createTodo(todo, token);
     } catch (error: any) {
       const message =
         (error.response &&
@@ -56,11 +64,12 @@ export const postTodos = createAsyncThunk(
   }
 );
 
-export const deleteTodo = createAsyncThunk(
+export const deleteTodo = createAsyncThunk<any, any, { state: RootState }>(
   "delete/todos",
   async (todo: any, thunkAPI) => {
     try {
-      return await todoService.deleteTodo(todo);
+      const token = thunkAPI.getState().auth.token;
+      return await todoService.deleteTodo(todo, token);
     } catch (error: any) {
       const message =
         (error.response &&
@@ -74,11 +83,12 @@ export const deleteTodo = createAsyncThunk(
   }
 );
 
-export const updateTodo = createAsyncThunk(
+export const updateTodo = createAsyncThunk<any, any, { state: RootState }>(
   "update/todo",
   async (todo: Todo, thunkAPI) => {
     try {
-      return await todoService.updateTodoStatus(todo);
+      const token = thunkAPI.getState().auth.token;
+      return await todoService.updateTodoStatus(todo, token);
     } catch (error: any) {
       const message =
         (error.response &&

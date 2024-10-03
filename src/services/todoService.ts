@@ -3,9 +3,7 @@ import axiosInstance from "../utils/axiosInstance";
 
 const API_URL = "/todos";
 
-const token = JSON.parse(localStorage.getItem("token") ?? "");
-
-const createTodo = async (todo: Todo): Promise<Todo> => {
+const createTodo = async (todo: Todo, token: string): Promise<Todo> => {
   const config = {
     headers: {
       Authorization: `Bearer ${token}`,
@@ -17,7 +15,7 @@ const createTodo = async (todo: Todo): Promise<Todo> => {
   return response.data;
 };
 
-const getTodos = async (): Promise<Todo[]> => {
+const getTodos = async (token: string): Promise<Todo[]> => {
   const config = {
     headers: {
       Authorization: `Bearer ${token}`,
@@ -28,7 +26,7 @@ const getTodos = async (): Promise<Todo[]> => {
   return response.data;
 };
 
-const updateTodoStatus = async (todo: Todo): Promise<Todo> => {
+const updateTodoStatus = async (todo: Todo, token: string): Promise<Todo> => {
   const config = {
     headers: {
       Authorization: `Bearer ${token}`,
@@ -45,7 +43,8 @@ const updateTodoStatus = async (todo: Todo): Promise<Todo> => {
 };
 
 const deleteTodo = async (
-  todo: Todo | undefined
+  todo: Todo | undefined,
+  token: string
 ): Promise<Todo | undefined> => {
   const config = {
     headers: {
