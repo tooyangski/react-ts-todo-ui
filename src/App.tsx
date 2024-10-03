@@ -6,6 +6,11 @@ import {
   ThemeProvider,
 } from "@mui/material";
 import router from "./Routes";
+import Header from "./components/Header";
+import { Provider } from "react-redux";
+import store from "./store";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const darkTheme = createTheme({
   palette: {
@@ -15,12 +20,16 @@ const darkTheme = createTheme({
 
 const App = () => {
   return (
-    <ThemeProvider theme={darkTheme}>
-      <CssBaseline />
-      <Container>
-        <RouterProvider router={router} />
-      </Container>
-    </ThemeProvider>
+    <Provider store={store}>
+      <ThemeProvider theme={darkTheme}>
+        <CssBaseline />
+        <ToastContainer position="top-right" />
+        <Header />
+        <Container>
+          <RouterProvider router={router} />
+        </Container>
+      </ThemeProvider>
+    </Provider>
   );
 };
 

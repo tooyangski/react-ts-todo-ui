@@ -1,5 +1,13 @@
 import { Button, Stack, TextField } from "@mui/material";
-import React, { useState } from "react";
+import LoadingButton from "@mui/lab/LoadingButton";
+import React, { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { toast } from "react-toastify";
+import { login, register, reset } from "../reducers/authSlice";
+import { User } from "../types/User";
+import { AppDispatch, RootState } from "../store";
+import { useNavigate } from "react-router-dom";
+import { AuthType } from "./Hint";
 
 type Credentials = {
   email: string;
@@ -10,11 +18,62 @@ interface AuthFormProps {
   submitLabel: string;
   onSubmit: (credentials: Credentials) => Promise<void>;
   children: React.ReactNode;
+  authType: AuthType;
 }
 
-const AuthForm = ({ submitLabel, onSubmit, children }: AuthFormProps) => {
+const AuthForm = ({
+  submitLabel,
+  onSubmit,
+  children,
+  authType,
+}: AuthFormProps) => {
+  const dispatch = useDispatch<AppDispatch>();
+  const navigate = useNavigate();
+
+  const { token, isError, isSuccess, isLoading, message } = useSelector(
+    (state: RootState) => state.auth
+  );
+
+  useEffect(() => {
+    // if register is error, create a toast
+    if (isError) {
+      if (Array.isArray(message)) {
+        toast.error(message[0]);
+      } else if (message) {
+        toast.error(message);
+      }
+    }
+
+    // redirect when logged in if success
+    if (isSuccess && authType !== AuthType.LOGIN) {
+      toast.success("You are authenticated.");
+      navigate("/");
+    } else if (isSuccess && authType !== AuthType.SIGNUP) {
+      toast.success("Success. Please login.");
+      navigate("/login");
+    }
+
+    dispatch(reset());
+  }, [dispatch, navigate, isError, isSuccess, message, token, authType]);
+
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
+
+  const handleSubmit = (e: any) => {
+    e.preventDefault();
+
+    const user: User = {
+      email,
+      password,
+    };
+
+    if (authType !== AuthType.LOGIN) {
+      dispatch(login(user));
+    } else {
+      dispatch(register(user));
+    }
+  };
+
   return (
     <Stack
       spacing={3}
@@ -42,9 +101,15 @@ const AuthForm = ({ submitLabel, onSubmit, children }: AuthFormProps) => {
         value={password}
         onChange={(e) => setPassword(e.target.value)}
       />
-      <Button variant="outlined" onClick={() => onSubmit({ email, password })}>
-        {submitLabel}
-      </Button>
+
+      {isLoading ? (
+        <LoadingButton loading loadingIndicator="Loading…" variant="outlined" />
+      ) : (
+        <Button variant="outlined" onClick={handleSubmit}>
+          {submitLabel}
+        </Button>
+      )}
+
       {children}
     </Stack>
   );

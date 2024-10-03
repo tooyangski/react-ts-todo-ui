@@ -10,7 +10,11 @@ interface AuthProps {
 
 const Auth = ({ label, redirectType, redirectRoute }: AuthProps) => {
   return (
-    <AuthForm submitLabel={label} onSubmit={async () => {}}>
+    <AuthForm
+      authType={redirectType}
+      submitLabel={label}
+      onSubmit={async () => {}}
+    >
       <Hint redirectType={redirectType} route={redirectRoute} />
     </AuthForm>
   );

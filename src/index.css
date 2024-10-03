@@ -3,3 +3,40 @@
   padding: 0;
   box-sizing: content-box;
 }
+
+.header {
+  background: linear-gradient(45deg, skyblue, orange);
+  color: white;
+  padding: 0.8em;
+  margin-bottom: 1em;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+
+  ul {
+    list-style: none;
+  }
+}
+
+.header.transparent {
+  background: linear-gradient(
+    45deg,
+    rgba(255, 0, 0, var(--header-transparency)),
+    rgba(255, 26, 236, var(--header-transparency))
+  );
+}
+
+.header .menu a {
+  color: white;
+}
+
+.header .menu ul {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1em;
+}
+
+.header .menu a:hover {
+  color: #f00;
+}
