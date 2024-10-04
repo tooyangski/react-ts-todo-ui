@@ -2,10 +2,11 @@
 
 https://github.com/user-attachments/assets/b476874a-f0e2-4890-b783-2776bdca4e2e
 
+## How to run this app
 
-# Getting Started with Create React App
-
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+- No need to setup any .env for the UI, just run the backend api properly.
+- Make sure you have the backend running locally. [nextjs-todo-api](https://github.com/tooyangski/nestjs-todo-api)
+- Run `yarn start`
 
 ## Available Scripts
 
