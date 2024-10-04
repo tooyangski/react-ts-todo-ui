@@ -26,7 +26,7 @@ const getTodos = async (token: string): Promise<Todo[]> => {
   return response.data;
 };
 
-const updateTodoStatus = async (todo: Todo, token: string): Promise<Todo> => {
+const patchTodoStatus = async (todo: Todo, token: string): Promise<Todo> => {
   const config = {
     headers: {
       Authorization: `Bearer ${token}`,
@@ -36,6 +36,25 @@ const updateTodoStatus = async (todo: Todo, token: string): Promise<Todo> => {
   const response = await axiosInstance.patch(
     `${API_URL}/${todo.id}/status`,
     { status: todo.status === "DONE" ? TodoStatus.OPEN : TodoStatus.DONE },
+    config
+  );
+
+  return response.data;
+};
+
+const updateTodo = async (todo: Todo, token: string): Promise<Todo> => {
+  const config = {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  };
+
+  const response = await axiosInstance.put(
+    `${API_URL}/${todo.id}`,
+    {
+      title: todo.title,
+      description: todo.description,
+    },
     config
   );
 
@@ -59,7 +78,8 @@ const deleteTodo = async (
 const todoService = {
   createTodo,
   getTodos,
-  updateTodoStatus,
+  patchTodoStatus,
+  updateTodo,
   deleteTodo,
 };
 

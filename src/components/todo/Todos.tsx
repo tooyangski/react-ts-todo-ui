@@ -16,14 +16,16 @@ import { AppDispatch, RootState } from "../../store";
 import {
   deleteTodo,
   getTodos,
+  patchTodo,
   postTodos,
-  updateTodo,
+  putTodo,
 } from "../../reducers/todoSlice";
 import { LoadingButton } from "@mui/lab";
 import { Todo, Todo as TodoDto } from "../../types/Todo";
 
 const Todos = () => {
   const dispatch = useDispatch<AppDispatch>();
+  const [isEditMode, setIsEditMode] = useState<boolean>(false);
   const [title, setTitle] = useState<string>("");
   const [desc, setDesc] = useState<string>("");
   const [selectedTodo, setSelectedTodo] = useState<TodoDto | undefined>(
@@ -62,8 +64,17 @@ const Todos = () => {
     dispatch(deleteTodo(selectedTodo));
   };
 
+  const handleEditTodo = (id?: string) => {
+    const editTodo: Todo = {
+      id: id ?? selectedTodo?.id,
+      title: title,
+      description: desc,
+    };
+    dispatch(putTodo(editTodo));
+  };
+
   const handleDone = (todo: Todo) => {
-    dispatch(updateTodo(todo));
+    dispatch(patchTodo(todo));
   };
 
   return (
@@ -91,7 +102,11 @@ const Todos = () => {
             variant="outlined"
           />
         ) : (
-          <Button onClick={handleCreateTodo} variant="outlined">
+          <Button
+            disabled={isEditMode}
+            onClick={handleCreateTodo}
+            variant="outlined"
+          >
             Create Todo
           </Button>
         )}
@@ -144,7 +159,30 @@ const Todos = () => {
                     gap: "1rem",
                   }}
                 >
-                  {/* <Button variant="contained">EDIT</Button> */}
+                  {isEditMode ? (
+                    <Button
+                      variant="contained"
+                      onClick={() => {
+                        handleEditTodo(t.id);
+                        setIsEditMode(false);
+                      }}
+                    >
+                      SAVE
+                    </Button>
+                  ) : (
+                    <Button
+                      variant="contained"
+                      onClick={() => {
+                        setSelectedTodo(t);
+                        setIsEditMode(true);
+                        setTitle(t.title);
+                        setDesc(t.description);
+                      }}
+                    >
+                      EDIT
+                    </Button>
+                  )}
+
                   <Button
                     color="secondary"
                     variant="contained"

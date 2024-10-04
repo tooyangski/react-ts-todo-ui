@@ -83,12 +83,31 @@ export const deleteTodo = createAsyncThunk<any, any, { state: RootState }>(
   }
 );
 
-export const updateTodo = createAsyncThunk<any, any, { state: RootState }>(
-  "update/todo",
+export const patchTodo = createAsyncThunk<any, any, { state: RootState }>(
+  "patch/todo",
   async (todo: Todo, thunkAPI) => {
     try {
       const token = thunkAPI.getState().auth.token;
-      return await todoService.updateTodoStatus(todo, token);
+      return await todoService.patchTodoStatus(todo, token);
+    } catch (error: any) {
+      const message =
+        (error.response &&
+          error.response.data &&
+          error.response.data.message) ||
+        error.message ||
+        error.toString();
+
+      return thunkAPI.rejectWithValue(message);
+    }
+  }
+);
+
+export const putTodo = createAsyncThunk<any, any, { state: RootState }>(
+  "put/todo",
+  async (todo: Todo, thunkAPI) => {
+    try {
+      const token = thunkAPI.getState().auth.token;
+      return await todoService.updateTodo(todo, token);
     } catch (error: any) {
       const message =
         (error.response &&
@@ -161,10 +180,10 @@ const todoSlice = createSlice({
         state.isError = true;
         state.message = action.payload;
       })
-      .addCase(updateTodo.pending, (state) => {
+      .addCase(patchTodo.pending, (state) => {
         state.isUpdatingData = true;
       })
-      .addCase(updateTodo.fulfilled, (state, action: PayloadAction<Todo>) => {
+      .addCase(patchTodo.fulfilled, (state, action: PayloadAction<Todo>) => {
         state.isUpdatingData = false;
         state.isSuccess = true;
         const targetItem = state.todos.findIndex(
@@ -172,7 +191,23 @@ const todoSlice = createSlice({
         );
         state.todos[targetItem] = action.payload;
       })
-      .addCase(updateTodo.rejected, (state, action: any) => {
+      .addCase(patchTodo.rejected, (state, action: any) => {
+        state.isUpdatingData = false;
+        state.isError = true;
+        state.message = action.payload;
+      })
+      .addCase(putTodo.pending, (state) => {
+        state.isUpdatingData = true;
+      })
+      .addCase(putTodo.fulfilled, (state, action: PayloadAction<Todo>) => {
+        state.isUpdatingData = false;
+        state.isSuccess = true;
+        const targetItem = state.todos.findIndex(
+          (x) => x.id === action.payload.id
+        );
+        state.todos[targetItem] = action.payload;
+      })
+      .addCase(putTodo.rejected, (state, action: any) => {
         state.isUpdatingData = false;
         state.isError = true;
         state.message = action.payload;
