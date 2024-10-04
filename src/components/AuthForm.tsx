@@ -3,7 +3,7 @@ import LoadingButton from "@mui/lab/LoadingButton";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
-import { login, register, reset } from "../reducers/authSlice";
+import { login, signup, reset } from "../reducers/authSlice";
 import { User } from "../types/User";
 import { AppDispatch, RootState } from "../store";
 import { useNavigate } from "react-router-dom";
@@ -35,7 +35,7 @@ const AuthForm = ({
   );
 
   useEffect(() => {
-    // if register is error, create a toast
+    // if signup is error, create a toast
     if (isError) {
       if (Array.isArray(message)) {
         toast.error(message[0]);
@@ -70,7 +70,7 @@ const AuthForm = ({
     if (authType !== AuthType.LOGIN) {
       dispatch(login(user));
     } else {
-      dispatch(register(user));
+      dispatch(signup(user));
     }
   };
 

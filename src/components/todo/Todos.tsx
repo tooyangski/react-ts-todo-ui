@@ -144,7 +144,7 @@ const Todos = () => {
                     gap: "1rem",
                   }}
                 >
-                  <Button variant="contained">EDIT</Button>
+                  {/* <Button variant="contained">EDIT</Button> */}
                   <Button
                     color="secondary"
                     variant="contained"

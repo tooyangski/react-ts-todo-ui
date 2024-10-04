@@ -33,14 +33,14 @@ const authSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      .addCase(register.pending, (state) => {
+      .addCase(signup.pending, (state) => {
         state.isLoading = true;
       })
-      .addCase(register.fulfilled, (state, action: PayloadAction<void>) => {
+      .addCase(signup.fulfilled, (state, action: PayloadAction<void>) => {
         state.isLoading = false;
         state.isSuccess = true;
       })
-      .addCase(register.rejected, (state, action: any) => {
+      .addCase(signup.rejected, (state, action: any) => {
         state.isLoading = false;
         state.isError = true;
         state.message = action.payload;
@@ -66,11 +66,11 @@ const authSlice = createSlice({
   },
 });
 
-export const register = createAsyncThunk(
+export const signup = createAsyncThunk(
   "auth/signup",
   async (user: User, thunkAPI) => {
     try {
-      return await authService.register(user);
+      return await authService.signup(user);
     } catch (error: any) {
       const errorMsg =
         (error.response &&

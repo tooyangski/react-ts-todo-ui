@@ -3,8 +3,7 @@ import axiosInstance from "../utils/axiosInstance";
 
 const API_URL = "/auth";
 
-// register user API
-const register = async (user: User): Promise<void> => {
+const signup = async (user: User): Promise<void> => {
   const response = await axiosInstance.post(`${API_URL}/signup`, user);
   if (response.data) {
     localStorage.setItem("token", JSON.stringify(response.data));
@@ -26,7 +25,7 @@ const logout = () => {
 
 // register every API call to authService
 const authService = {
-  register,
+  signup,
   logout,
   login,
 };
